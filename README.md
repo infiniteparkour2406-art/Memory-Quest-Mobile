@@ -1,0 +1,1 @@
+Memory Quest Mobile é um jogo da memória otimizado para celulares. As cartas se ajustam ao tamanho da tela, funcionam por toque e oferecem uma experiência simples e leve para qualquer dispositivo móvel.
