@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Memory Quest Mobile</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f2f2f2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+h1 {
+  margin: 16px 0 4px;
+  font-size: 22px;
+}
+
+p {
+  margin: 0;
+  font-size: 14px;
+}
+
+#game {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  width: 90vw;
+  max-width: 420px;
+  margin-top: 20px;
+}
+
+.card {
+  aspect-ratio: 1 / 1;
+  background: #333;
+  color: #fff;
+  font-size: 8vw;
+  max-font-size: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+.card.revealed {
+  background: #4caf50;
+}
+
+@media (orientation: landscape) {
+  #game {
+    grid-template-columns: repeat(6, 1fr);
+    max-width: 600px;
+  }
+}
+</style>
+</head>
+<body>
+
+<h1>Memory Quest Mobile</h1>
+<p>Toque nas cartas e encontre os pares</p>
+
+<div id="game"></div>
+
+<script>
+const symbols = ["🍎","🍌","🍇","🍓","🍍","🥝",
+                 "🍎","🍌","🍇","🍓","🍍","🥝"];
+
+symbols.sort(() => Math.random() - 0.5);
+
+const game = document.getElementById("game");
+let firstCard = null;
+let lock = false;
+
+symbols.forEach(symbol => {
+  const card = document.createElement("div");
+  card.className = "card";
+  card.textContent = "❓";
+
+  card.addEventListener("click", () => {
+    if (lock || card.classList.contains("revealed")) return;
+
+    card.textContent = symbol;
+    card.classList.add("revealed");
+
+    if (!firstCard) {
+      firstCard = { card, symbol };
+    } else {
+      if (firstCard.symbol !== symbol) {
+        lock = true;
+        setTimeout(() => {
+          firstCard.card.textContent = "❓";
+          firstCard.card.classList.remove("revealed");
+          card.textContent = "❓";
+          card.classList.remove("revealed");
+          firstCard = null;
+          lock = false;
+        }, 700);
+      } else {
+        firstCard = null;
+      }
+    }
+  });
+
+  game.appendChild(card);
+});
+</script>
+
+</body>
+</html>
